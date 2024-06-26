@@ -1,0 +1,21 @@
+services:
+  api:
+    container_name: Project-x
+    image: project-x
+    restart: unless-stopped
+    build:
+      context: ./
+    volumes:
+      - .:/Project-x
+      - /Project-x/node_modules
+    ports:
+      - 3001:3001
+    networks:
+      - projectX-network
+    # depends_on:
+    #   - postgres
+    command: npx nest start --watch
+
+networks:
+  projectX-network:
+    external: true
