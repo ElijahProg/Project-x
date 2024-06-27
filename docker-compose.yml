@@ -1,3 +1,6 @@
+volumes:
+  mongodb:
+  
 services:
   api:
     container_name: Project-x
@@ -15,7 +18,17 @@ services:
     # depends_on:
     #   - postgres
     command: npx nest start --watch
-
+  mongodb:
+    image: mongo
+    volumes:
+      - mongodb:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - projectX-network
+    restart: unless-stopped
+    logging:
+      driver: none
 networks:
   projectX-network:
     external: true

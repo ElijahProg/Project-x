@@ -4,9 +4,11 @@ LABEL maintainer="Elias"
 
 WORKDIR /Project-x
 
-COPY --chown=node:node . .
-
 # Install dependencies
+RUN rm -rf node_modules
+COPY package.json /Project-x
+
+# RUN npm install
 RUN yarn --frozen-lockfile
 
 # Set Docker as a non-root user
