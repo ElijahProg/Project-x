@@ -16,7 +16,7 @@ let AppModule = class AppModule {
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [mongoose_1.MongooseModule.forRoot('mongodb://mongo:27017/projectX')],
+        imports: [mongoose_1.MongooseModule.forRoot('mongodb://mongodb:27017', { dbName: 'projectX' })],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

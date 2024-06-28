@@ -3,7 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://mongo:27017/projectX')],
+  imports: [MongooseModule.forRoot('mongodb://mongodb:27017',
+  {dbName:'projectX'})],
   controllers: [AppController],
   providers: [AppService],
 })
