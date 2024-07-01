@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UsersDocument } from './users.schema';
@@ -11,7 +11,13 @@ export class UsersService {
 
 
     async post (createUserDto: CreateUserDto): Promise<UsersDocument>{
-        const newUser = await new this.userModel(createUserDto);
-        return newUser.save()
+        try{
+            const newUser = new this.userModel(createUserDto);
+            return await newUser.save()
+        }catch(ex){
+            console.log(`Exception:${ex}`)
+            throw new BadRequestException(`there is user with this email`)
+        }
+        
     }
 }
