@@ -11,5 +11,4 @@ COPY package.json /Project-x
 # RUN npm install
 RUN yarn --frozen-lockfile
 
-# Set Docker as a non-root user
-USER node
+COPY . /Project-x
