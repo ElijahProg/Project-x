@@ -16,7 +16,7 @@ export class UsersService {
             return await newUser.save()
         }catch(ex){
             console.log(`Exception:${ex}`)
-            throw new BadRequestException(`there is user with this email`)
+            throw new BadRequestException(`there is user with this email:${ex}`)
         }
         
     }
