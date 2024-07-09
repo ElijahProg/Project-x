@@ -1,22 +1,23 @@
-import { Body, Request, Controller, Post, UseGuards, Get, BadRequestException, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Request, Controller, Post, UseGuards, Get, BadRequestException, HttpCode, HttpStatus, Logger } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LocalAuthGuard } from './local-auth.guard';
 
-@Controller('')
+@Controller('auth')
 export class AuthController {
+    logger: Logger;
     constructor(
         private userService: UsersService,
         private authService: AuthService) { }
 
-
-    @Get('/check')
+    @Get('auth')
     getHello(): string {
+        this.logger.log(`Checker log`)
         return "check"
     }
 
-    @Post('/add-user')
+    @Post('add-user')
     async addUser(@Body() createUserDto: CreateUserDto) {
         if (!createUserDto.firstName) throw new BadRequestException('Path `firstName` not found!!')
         if (!createUserDto.lastName) throw new BadRequestException('Path `lastName` not found!!')

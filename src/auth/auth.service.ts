@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UsersDocument } from 'src/users/users.schema';
-import {bcrypt} from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -38,13 +38,9 @@ export class AuthService {
     }
 
     async getHashedPassword(password: string): Promise<any>{
-        return new Promise((resolve,reject)=>{
-            bcrypt.hash(password,10,(err, hash)=>{
-                if(err){
-                    reject(err);
-                }
-                resolve(hash);
-            });
+        return new Promise(async (resolve,reject)=>{
+            const result = await bcrypt.hash(password,10)
+            resolve(result)
         });
     }
 }

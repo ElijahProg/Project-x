@@ -25,7 +25,6 @@ export class UsersService {
 
     async post(createUserDto: CreateUserDto): Promise<UsersDocument> {
         try {
-            this.logger.log('Creating user.');
             const hashedPassword = await this.authService.getHashedPassword(
                 createUserDto.password
             );
@@ -39,7 +38,7 @@ export class UsersService {
             return await newUser.save()
         } catch (ex) {
             console.log(`Exception:${ex}`)
-            throw new BadRequestException(`there is user with this email:${ex}`)
+            throw new BadRequestException(`${ex}`)
         }
 
     }
