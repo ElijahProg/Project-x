@@ -10,9 +10,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
     logger: Logger;
     constructor(
+        @Inject(forwardRef(() => AuthService)) private authService: AuthService,
         @InjectModel(User.name) private readonly userModel: Model<UsersDocument>,
-        @Inject(forwardRef(() => AuthService))
-        private AuthService: AuthService
+        
     ) {
         this.logger = new Logger(UsersService.name)
     }
@@ -26,7 +26,7 @@ export class UsersService {
     async post(createUserDto: CreateUserDto): Promise<UsersDocument> {
         try {
             this.logger.log('Creating user.');
-            const hashedPassword = await this.AuthService.getHashedPassword(
+            const hashedPassword = await this.authService.getHashedPassword(
                 createUserDto.password
             );
             const user = {
