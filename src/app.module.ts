@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,14 +8,16 @@ import { UserSchema } from './users/users.schema';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [AuthModule, UsersModule,
+  imports: [
+    forwardRef(() => AuthModule),
+    forwardRef(() => UsersModule),
     MongooseModule.forRoot('mongodb://mongodb:27017',
-      { 
+      {
         // useCreateusIndex: true,
         autoIndex: true,
         dbName: 'projectX',
-       }), MongooseModule.forFeature([{ name: "User", schema: UserSchema }]),
-       PassportModule.register({ defaultStrategy: 'jwt' })],
+      }), MongooseModule.forFeature([{ name: "User", schema: UserSchema }]),
+    PassportModule.register({ defaultStrategy: 'jwt' })],
   controllers: [AppController],
   providers: [AppService],
 })

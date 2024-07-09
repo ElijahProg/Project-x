@@ -1,29 +1,29 @@
-import { PassportStrategy } from '@nestjs/passport';
+// import { PassportStrategy } from '@nestjs/passport';
 
-import { ExtractJwt, Strategy } from 'passport-jwt';
+// import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { jwtConstants } from './constants';
+// import { jwtConstants } from './constants';
 
-export class JwtStrategy extends PassportStrategy(Strategy) {
+// export class JwtStrategy extends PassportStrategy(Strategy) {
 
-constructor() {
+// constructor() {
 
-super({
+// super({
 
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+//   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 
-  ignoreExpiration: false,
+//   ignoreExpiration: false,
 
-  secretOrKey: jwtConstants.secret,
+//   secretOrKey: jwtConstants.secret,
 
-});
+// });
 
-}
+// }
 
-async validate(payload: any) {
+// async validate(payload: any) {
 
-return { userId: payload.sub, username: payload.username };
+// return { userId: payload.sub, username: payload.username };
 
-}
+// }
 
-}
+// }

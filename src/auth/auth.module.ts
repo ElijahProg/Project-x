@@ -1,32 +1,33 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 
 import { JwtModule } from '@nestjs/jwt';
 
 import { PassportModule } from '@nestjs/passport';
 
-import { JwtStrategy } from './jwt.strategy';
+// import { JwtStrategy } from './jwt.strategy';
 import { jwtConstants } from './constants';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
 
-imports: [
+  imports: [
+    forwardRef(() => UsersModule),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
 
-PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
 
-JwtModule.register({
+      secret: jwtConstants.secret,
 
-  secret: jwtConstants.secret,
+      signOptions: { expiresIn: '60s' }
 
-  signOptions: { expiresIn: '60s' }
+    })
+
+  ],
+
+  // providers: [JwtStrategy],
+  providers: [],
+  exports: [JwtModule, PassportModule]
 
 })
 
-],
-
-providers: [JwtStrategy],
-
-exports: [JwtModule, PassportModule]
-
-})
-
-export class AuthModule {}
+export class AuthModule { }
