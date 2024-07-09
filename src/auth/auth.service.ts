@@ -1,12 +1,17 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException, forwardRef } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UsersDocument } from 'src/users/users.schema';
+import {bcrypt} from 'bcrypt'
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
-    constructor(@InjectModel(User.name) private readonly userModel: Model<UsersDocument>, private jwtService: JwtService) { }
+    constructor(
+        @InjectModel(User.name) private readonly userModel: Model<UsersDocument>, 
+        @Inject(forwardRef(() => UsersService)) private userService: UsersService,
+        private jwtService: JwtService) { }
 
     async validateUser(username: string, pass: string): Promise<any> {
         console.log(username)
@@ -30,5 +35,16 @@ export class AuthService {
                 token: this.jwtService.sign(payload)
             }
         }
+    }
+
+    async getHashedPassword(password: string): Promise<any>{
+        return new Promise((resolve,reject)=>{
+            bcrypt.hash(password,10,(err, hash)=>{
+                if(err){
+                    reject(err);
+                }
+                resolve(hash);
+            });
+        });
     }
 }

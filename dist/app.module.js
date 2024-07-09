@@ -14,16 +14,21 @@ const mongoose_1 = require("@nestjs/mongoose");
 const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
 const users_schema_1 = require("./users/users.schema");
+const passport_1 = require("@nestjs/passport");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, users_module_1.UsersModule,
+        imports: [
+            (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
+            (0, common_1.forwardRef)(() => users_module_1.UsersModule),
             mongoose_1.MongooseModule.forRoot('mongodb://mongodb:27017', {
                 autoIndex: true,
                 dbName: 'projectX',
-            }), mongoose_1.MongooseModule.forFeature([{ name: "User", schema: users_schema_1.UserSchema }])],
+            }), mongoose_1.MongooseModule.forFeature([{ name: "User", schema: users_schema_1.UserSchema }]),
+            passport_1.PassportModule.register({ defaultStrategy: 'jwt' })
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
