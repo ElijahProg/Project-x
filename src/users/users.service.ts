@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { User, UsersDocument } from './users.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import {hash} from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -29,25 +30,24 @@ export class UsersService {
 
 
 
-    // async post(createUserDto: CreateUserDto): Promise<UsersDocument> {
-    //     try {
-    //         const hashedPassword = await this.authService.getHashedPassword(
-    //             createUserDto.password
-    //         );
-    //         const user = {
-    //             password: hashedPassword,
-    //             firstName: createUserDto.firstName,
-    //             lastName: createUserDto.lastName,
-    //             email: createUserDto.email
-    //         }
-    //         const newUser = new this.userModel(user);
-    //         return await newUser.save()
-    //     } catch (ex) {
-    //         console.log(`Exception:${ex}`)
-    //         throw new BadRequestException(`${ex}`)
-    //     }
+    async post(createUserDto: CreateUserDto): Promise<UsersDocument> {
+        try {
+            const saltOrRounds = 10;
+            const hashedPassword = await hash(createUserDto.password, saltOrRounds);
+            const user = {
+                password: hashedPassword,
+                firstName: createUserDto.firstName,
+                lastName: createUserDto.lastName,
+                email: createUserDto.email
+            }
+            const newUser = new this.userModel(user);
+            return await newUser.save()
+        } catch (ex) {
+            console.log(`Exception:${ex}`)
+            throw new BadRequestException(`${ex}`)
+        }
 
-    // }
+    }
 
     async update(query:any, updateUserDto: UpdateUserDto): Promise<UsersDocument>{
         try{

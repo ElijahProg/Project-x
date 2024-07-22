@@ -17,13 +17,8 @@ export class UsersController {
         if (!createUserDto.lastName) throw new BadRequestException('Path `lastName` not found!!')
         if (!createUserDto.email) throw new BadRequestException('Path `email` not found!!')
         if (!createUserDto.password) throw new BadRequestException('Path `password` not found!!')
-        // const newUser = await this.userService.post(createUserDto);
+        const newUser = await this.userService.post(createUserDto);
         return { _id: "newUser._id" }
-    }
-
-    @Get('')
-    async users(@Body() users: any) {
-        return await this.userService.find({});
     }
     @UseGuards(LocalAuthGuard)
     @Post('login')
@@ -33,8 +28,10 @@ export class UsersController {
         return user
     }
     @UseGuards(AuthenticatedGuard)
-    @Get('protected')
-      getHello(@Request() req): string {
-        return req.user;
+    @Get('')
+     async getHello(@Request() req) {
+        const users = await this.userService.find(req.body);
+        console.log(users)
+        return users;
       }
 }
