@@ -22,10 +22,8 @@ export class UsersController {
     }
     @UseGuards(LocalAuthGuard)
     @Post('login')
-    async login(@Body() req){
-        console.log(req)
-        const user = await this.userService.findOne({email:req.username})
-        return user
+    async login(@Request() req){
+        return req.user
     }
     @UseGuards(AuthenticatedGuard)
     @Get('')

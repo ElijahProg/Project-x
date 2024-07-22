@@ -22,14 +22,14 @@ export class UsersService {
     }
 
     async findAuth(query:any):Promise<any>{
-        return await this.userModel.findOne(query);
+        return await this.userModel.findOne(query).select(['_id','email','password']);
     }
     async findOne(query: any): Promise<any> {
         return await this.userModel.findOne(query).select('-password, -__v');
     }
-
-
-
+    async get(id:any):Promise<any>{
+        return await this.userModel.findById(id).select(['-password','-__v'])
+    }
     async post(createUserDto: CreateUserDto): Promise<UsersDocument> {
         try {
             const saltOrRounds = 10;

@@ -9,7 +9,10 @@ export class AuthService {
         if (!user) throw new NotAcceptableException('could not find the user')
         const passwordValid = await compare(password,user.password);//.compare(password, user.password);
         if (user && passwordValid) {
-            return { userName: user.firstName + " " + user.lastName }
+            const retUser = this.usersService.get(user._id);
+            return retUser
         } else throw new UnauthorizedException(' Invalid username and/or password')
     }
+
+
 }
