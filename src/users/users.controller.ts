@@ -1,23 +1,40 @@
-import { BadRequestException, Body, Controller, Logger, Post } from '@nestjs/common';
+import { BadRequestException, Request,Body, Controller, Get, Logger, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { AuthService } from 'src/auth/auth.service';
+// import { AuthService } from 'src/auth/auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LocalAuthGuard } from 'src/auth/local.auth.guard';
+import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 
 @Controller('users')
 export class UsersController {
     logger: Logger;
     constructor(
-        private userService: UsersService,
-        private authService: AuthService) { }
+        private userService: UsersService) { }
 
-        @Post('add-user')
+    @Post('signup')
     async addUser(@Body() createUserDto: CreateUserDto) {
-        console.log('add user')
         if (!createUserDto.firstName) throw new BadRequestException('Path `firstName` not found!!')
         if (!createUserDto.lastName) throw new BadRequestException('Path `lastName` not found!!')
         if (!createUserDto.email) throw new BadRequestException('Path `email` not found!!')
         if (!createUserDto.password) throw new BadRequestException('Path `password` not found!!')
-        const newUser = await this.userService.post(createUserDto);
-        return { _id: newUser._id }
+        // const newUser = await this.userService.post(createUserDto);
+        return { _id: "newUser._id" }
     }
+
+    @Get('')
+    async users(@Body() users: any) {
+        return await this.userService.find({});
+    }
+    @UseGuards(LocalAuthGuard)
+    @Post('login')
+    async login(@Body() req){
+        console.log(req)
+        const user = await this.userService.findOne({email:req.username})
+        return user
+    }
+    @UseGuards(AuthenticatedGuard)
+    @Get('protected')
+      getHello(@Request() req): string {
+        return req.user;
+      }
 }

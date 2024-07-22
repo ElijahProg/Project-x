@@ -3,45 +3,51 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UsersDocument } from './users.schema';
 import { CreateUserDto } from './dto/create-user.dto';
-import { AuthService } from 'src/auth/auth.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
     logger: Logger;
     constructor(
-        @Inject(forwardRef(() => AuthService)) private authService: AuthService,
+        // @Inject(forwardRef(() => AuthService)) private authService: AuthService,
         @InjectModel(User.name) private readonly userModel: Model<UsersDocument>,
         
     ) {
         this.logger = new Logger(UsersService.name)
     }
 
+    async find(query:any): Promise<any>{
+        return await this.userModel.find(query).select('-password');
+    }
+
+    async findAuth(query:any):Promise<any>{
+        return await this.userModel.findOne(query);
+    }
     async findOne(query: any): Promise<any> {
-        return await this.userModel.findOne(query).select('+password');
+        return await this.userModel.findOne(query).select('-password, -__v');
     }
 
 
 
-    async post(createUserDto: CreateUserDto): Promise<UsersDocument> {
-        try {
-            const hashedPassword = await this.authService.getHashedPassword(
-                createUserDto.password
-            );
-            const user = {
-                password: hashedPassword,
-                firstName: createUserDto.firstName,
-                lastName: createUserDto.lastName,
-                email: createUserDto.email
-            }
-            const newUser = new this.userModel(user);
-            return await newUser.save()
-        } catch (ex) {
-            console.log(`Exception:${ex}`)
-            throw new BadRequestException(`${ex}`)
-        }
+    // async post(createUserDto: CreateUserDto): Promise<UsersDocument> {
+    //     try {
+    //         const hashedPassword = await this.authService.getHashedPassword(
+    //             createUserDto.password
+    //         );
+    //         const user = {
+    //             password: hashedPassword,
+    //             firstName: createUserDto.firstName,
+    //             lastName: createUserDto.lastName,
+    //             email: createUserDto.email
+    //         }
+    //         const newUser = new this.userModel(user);
+    //         return await newUser.save()
+    //     } catch (ex) {
+    //         console.log(`Exception:${ex}`)
+    //         throw new BadRequestException(`${ex}`)
+    //     }
 
-    }
+    // }
 
     async update(query:any, updateUserDto: UpdateUserDto): Promise<UsersDocument>{
         try{

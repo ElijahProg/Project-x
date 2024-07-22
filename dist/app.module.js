@@ -11,23 +11,25 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const mongoose_1 = require("@nestjs/mongoose");
-const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
 const users_schema_1 = require("./users/users.schema");
 const passport_1 = require("@nestjs/passport");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
             (0, common_1.forwardRef)(() => users_module_1.UsersModule),
+            (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
+            passport_1.PassportModule.register({ session: true }),
             mongoose_1.MongooseModule.forRoot('mongodb://mongodb:27017', {
                 autoIndex: true,
                 dbName: 'projectX',
             }), mongoose_1.MongooseModule.forFeature([{ name: "User", schema: users_schema_1.UserSchema }]),
-            passport_1.PassportModule.register({ defaultStrategy: 'jwt' })
+            passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
+            auth_module_1.AuthModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
