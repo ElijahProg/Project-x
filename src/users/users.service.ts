@@ -3,32 +3,37 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UsersDocument } from './users.schema';
 import { CreateUserDto } from './dto/create-user.dto';
-import { AuthService } from 'src/auth/auth.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import {hash} from 'bcrypt'
 
 @Injectable()
 export class UsersService {
     logger: Logger;
     constructor(
-        @Inject(forwardRef(() => AuthService)) private authService: AuthService,
+        // @Inject(forwardRef(() => AuthService)) private authService: AuthService,
         @InjectModel(User.name) private readonly userModel: Model<UsersDocument>,
         
     ) {
         this.logger = new Logger(UsersService.name)
     }
 
-    async findOne(query: any): Promise<any> {
-        return await this.userModel.findOne(query).select('+password');
+    async find(query:any): Promise<any>{
+        return await this.userModel.find(query).select('-password');
     }
 
-
-
+    async findAuth(query:any):Promise<any>{
+        return await this.userModel.findOne(query).select(['_id','email','password']);
+    }
+    async findOne(query: any): Promise<any> {
+        return await this.userModel.findOne(query).select('-password, -__v');
+    }
+    async get(id:any):Promise<any>{
+        return await this.userModel.findById(id).select(['-password','-__v'])
+    }
     async post(createUserDto: CreateUserDto): Promise<UsersDocument> {
         try {
-            this.logger.log('Creating user.');
-            const hashedPassword = await this.authService.getHashedPassword(
-                createUserDto.password
-            );
+            const saltOrRounds = 10;
+            const hashedPassword = await hash(createUserDto.password, saltOrRounds);
             const user = {
                 password: hashedPassword,
                 firstName: createUserDto.firstName,
@@ -39,7 +44,7 @@ export class UsersService {
             return await newUser.save()
         } catch (ex) {
             console.log(`Exception:${ex}`)
-            throw new BadRequestException(`there is user with this email:${ex}`)
+            throw new BadRequestException(`${ex}`)
         }
 
     }
