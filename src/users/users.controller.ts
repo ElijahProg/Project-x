@@ -25,6 +25,13 @@ export class UsersController {
     async login(@Request() req){
         return req.user
     }
+
+    @Get('/logout')
+    logout(@Request() req){
+        if(!req.session.passport) throw new BadRequestException("No session value")
+        req.session.destroy()
+        return {msg:"Session destroyed successfully"}
+    }
     @UseGuards(AuthenticatedGuard)
     @Get('')
      async getHello(@Request() req) {
