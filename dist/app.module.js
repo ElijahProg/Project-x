@@ -15,6 +15,7 @@ const users_module_1 = require("./users/users.module");
 const users_schema_1 = require("./users/users.schema");
 const passport_1 = require("@nestjs/passport");
 const auth_module_1 = require("./auth/auth.module");
+const saint_module_1 = require("./saint/saint.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -29,7 +30,8 @@ exports.AppModule = AppModule = __decorate([
                 dbName: 'projectX',
             }), mongoose_1.MongooseModule.forFeature([{ name: "User", schema: users_schema_1.UserSchema }]),
             passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
-            auth_module_1.AuthModule
+            auth_module_1.AuthModule,
+            saint_module_1.SaintModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
