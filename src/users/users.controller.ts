@@ -36,7 +36,6 @@ export class UsersController {
     @Get('')
      async getHello(@Request() req) {
         const users = await this.userService.find(req.body);
-        console.log(users)
         return users;
       }
 }
