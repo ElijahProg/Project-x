@@ -18,7 +18,7 @@ export class UsersController {
         if (!createUserDto.email) throw new BadRequestException('Path `email` not found!!')
         if (!createUserDto.password) throw new BadRequestException('Path `password` not found!!')
         const newUser = await this.userService.post(createUserDto);
-        return { _id: "newUser._id" }
+        return { _id: newUser._id }
     }
     @UseGuards(LocalAuthGuard)
     @Post('login')
