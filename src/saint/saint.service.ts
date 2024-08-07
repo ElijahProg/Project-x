@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Saints, SaintsDocument } from './saint.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateSaintDto } from './create-saint.dto';
+import { CreateSaintDto } from './dtos/create-saint.dto';
 
 @Injectable()
 export class SaintsService {
