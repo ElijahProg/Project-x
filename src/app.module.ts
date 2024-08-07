@@ -7,6 +7,7 @@ import { UserSchema } from './users/users.schema';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { SaintModule } from './saint/saint.module';
+import { LookupModule } from './lookup/lookup.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { SaintModule } from './saint/saint.module';
       }), MongooseModule.forFeature([{ name: "User", schema: UserSchema }]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     AuthModule,
-    SaintModule],
+    SaintModule,
+    LookupModule],
   controllers: [AppController],
   providers: [AppService],
 })

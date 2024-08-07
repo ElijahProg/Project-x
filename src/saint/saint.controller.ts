@@ -1,6 +1,6 @@
 import { BadRequestException, Post, Patch, Body, Put, Controller, Get, HttpCode, Logger, Param, Request, UseGuards, Delete, Query } from '@nestjs/common';
 import { SaintsService } from './saint.service';
-import { CreateSaintDto } from './create-saint.dto';
+import { CreateSaintDto } from './dtos/create-saint.dto';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 
 @Controller('saint')
