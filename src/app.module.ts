@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { SaintModule } from './saint/saint.module';
 import { LookupModule } from './lookup/lookup.module';
+import { ChurchsModule } from './churchs/churchs.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { LookupModule } from './lookup/lookup.module';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     AuthModule,
     SaintModule,
-    LookupModule],
+    LookupModule,
+    ChurchsModule],
   controllers: [AppController],
   providers: [AppService],
 })
